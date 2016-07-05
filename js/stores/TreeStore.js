@@ -38,7 +38,7 @@ function addChildBelow(subtree, data){
 
 // Adds childtree as the first child of subtree.
 function addChildTree(subtree, childtree){
-  subtree.children.unshift(childtree);
+  subtree.children.push(childtree);
   childtree.parent = subtree;
 }
 
