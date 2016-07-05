@@ -108,6 +108,17 @@ TreeStore.dispatchToken = AppDispatcher.register(function(payload) {
       makeNodeChildOfSibling(action.node);
       TreeStore.emitChange();
       break;
+    case "ADD_CHAR_TO":
+      action.node.data += action.char;
+      console.log(action.node.data + " data");
+      TreeStore.emitChange();
+      break;
+    case "DELETE_CHAR":
+      if (action.node.data.length > 0){
+        action.node.data = action.node.data.substring(0, action.node.data.length - 1);
+        TreeStore.emitChange();
+      }
+      break;
     default: 
       // Do nothing
   }

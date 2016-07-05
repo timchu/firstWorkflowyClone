@@ -4,6 +4,12 @@ var React = require('react');
 
 var ENTER_KEY_CODE = 13;
 var TAB_KEY_CODE = 9;
+var DELETE_KEY_CODE = 8;
+
+function isPrintable(charCode) {
+    var valid = (charCode >= 32 && charCode <= 126);
+    return valid;
+}
 
 // Not used yet.
 var WorkflowyLine = React.createClass({
@@ -24,16 +30,26 @@ var WorkflowyPresentationTree = React.createClass({
   render: function() {
     return (
       <div>
-        <textarea onKeyDown={this._onKeyDown}>{this.props.tree.data}</textarea>
+        <textarea onKeyDown={this._onKeyDown} onKeyPress={this._onKeyPress} value={this.props.tree.data}></textarea>
         <ul>
           { this.props.tree.children.map ((c) => <WorkflowyPresentationTree tree = { c }/>) }
         </ul>
       </div>
     );
   },
+  _onKeyPress: function(event) {
+    console.log("test");
+    console.log(event.charCode);
+    if (isPrintable(event.charCode)){
+      event.preventDefault();
+      var char = String.fromCharCode(event.charCode);
+      console.log("Char " + char);
+      ActionCreator.addCharTo(this.props.tree, char);
+    }
+  },
 
   // Note; I don't like the onkeydown in each presentation tree....
-  _onKeyDown(event){
+  _onKeyDown: function(event){
     switch (event.keyCode) {
       case ENTER_KEY_CODE:
         event.preventDefault();
@@ -42,7 +58,11 @@ var WorkflowyPresentationTree = React.createClass({
       case TAB_KEY_CODE:
         event.preventDefault();
         ActionCreator.makeNodeChildOfSibling(this.props.tree);
-        break
+        break;
+      case DELETE_KEY_CODE:
+        event.preventDefault();
+        ActionCreator.deleteChar(this.props.tree);
+        break;
       default:
         // do nothing.
     }
