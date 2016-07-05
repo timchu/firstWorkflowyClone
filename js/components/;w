@@ -30,9 +30,7 @@ var WorkflowyPresentationTree = React.createClass({
   render: function() {
     return (
       <div>
-      <li>
-      <textarea onKeyDown={this._onKeyDown} style={{width: "100%"}} onKeyPress={this._onKeyPress} value={this.props.tree.data}></textarea>
-      </li>
+        <textarea onKeyDown={this._onKeyDown} style={{border:"none", border-color:"transparent"}} onKeyPress={this._onKeyPress} value={this.props.tree.data}></textarea>
         <ul>
           { this.props.tree.children.map ((c) => <WorkflowyPresentationTree tree = { c }/>) }
         </ul>
