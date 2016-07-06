@@ -27,11 +27,12 @@ function getStateFromStores() {
 // Passed in: node, text.
 // Presentational component. Passed in props since this is a recursive structure.
 var WorkflowyPresentationTree = React.createClass({
+
   render: function() {
     return (
       <div>
       <li>
-      <textarea onKeyDown={this._onKeyDown} style={{width: "100%"}} onKeyPress={this._onKeyPress} value={this.props.tree.data}></textarea>
+      <textarea onKeyDown={this._onKeyDown} style={{width: "100%"}} onChange={this._onChange} value={this.props.tree.data}></textarea>
       </li>
         <ul>
           { this.props.tree.children.map ((c) => <WorkflowyPresentationTree tree = { c }/>) }
@@ -39,15 +40,9 @@ var WorkflowyPresentationTree = React.createClass({
       </div>
     );
   },
-  _onKeyPress: function(event) {
-    console.log("test");
-    console.log(event.charCode);
-    if (isPrintable(event.charCode)){
-      event.preventDefault();
-      var char = String.fromCharCode(event.charCode);
-      console.log("Char " + char);
-      ActionCreator.addCharTo(this.props.tree, char);
-    }
+
+  _onChange: function(event, value) {
+    ActionCreator.setText(this.props.tree, event.target.value);
   },
 
   // Note; I don't like the onkeydown in each presentation tree....

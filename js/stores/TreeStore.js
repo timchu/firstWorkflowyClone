@@ -27,10 +27,7 @@ function addChildBelow(subtree, data){
   var nt = newTree(data, par);
   for (var i = 0; i < par.children.length; ++i){
     if (par.children[i] === subtree) {
-      console.log("index at : "  + i);
       par.children.splice(i+1, 0, nt);
-      console.log(par.children[i].data);
-      console.log(par.children[i+1].data);
       break;
     }
   }
@@ -108,15 +105,9 @@ TreeStore.dispatchToken = AppDispatcher.register(function(payload) {
       makeNodeChildOfSibling(action.node);
       TreeStore.emitChange();
       break;
-    case "ADD_CHAR_TO":
-      action.node.data += action.char;
+    case "SET_TEXT":
+      action.node.data = action.text;
       TreeStore.emitChange();
-      break;
-    case "DELETE_CHAR":
-      if (action.node.data.length > 0){
-        action.node.data = action.node.data.substring(0, action.node.data.length - 1);
-        TreeStore.emitChange();
-      }
       break;
     default: 
       // Do nothing
