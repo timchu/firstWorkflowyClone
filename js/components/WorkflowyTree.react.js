@@ -54,6 +54,15 @@ var WorkflowyPresentationTree = React.createClass({
         break;
       case TAB_KEY_CODE:
         event.preventDefault();
+        if (event.shiftKey){
+          ActionCreator.makeNodeSiblingOfParent(this.props.tree);
+        }
+        else {
+          ActionCreator.makeNodeChildOfSibling(this.props.tree);
+        }
+        break;
+      case TAB_KEY_CODE:
+        event.preventDefault();
         ActionCreator.makeNodeChildOfSibling(this.props.tree);
         break;
       case DELETE_KEY_CODE:

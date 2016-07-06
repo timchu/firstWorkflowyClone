@@ -19,5 +19,11 @@ module.exports = {
       type: "MAKE_NODE_CHILD_OF_SIBLING",
       node: node
     });
+  },
+  makeNodeSiblingOfParent: function(node) {
+    AppDispatcher.handleViewAction({
+      type: "MAKE_NODE_SIBLING_OF_PARENT",
+      node: node
+    });
   }
 };

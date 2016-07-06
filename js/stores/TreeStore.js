@@ -21,16 +21,10 @@ function addChild(subtree, data){
 var _tree = newTree("Initial Root");
 addChild(_tree, "Initial data");
 
-// Doesn't work yet.
-function addChildBelow(subtree, data){
+function addSiblingBelow(subtree, data){
   var par = subtree.parent;
   var nt = newTree(data, par);
-  for (var i = 0; i < par.children.length; ++i){
-    if (par.children[i] === subtree) {
-      par.children.splice(i+1, 0, nt);
-      break;
-    }
-  }
+  addSiblingTreeBelow(subtree, nt);
 }
 
 // Adds childtree as the first child of subtree.
@@ -38,6 +32,34 @@ function addChildTree(subtree, childtree){
   subtree.children.push(childtree);
   childtree.parent = subtree;
 }
+
+function addSiblingTreeBelow(siblingtree, tree){
+  var par = siblingtree.parent;
+  for (var i = 0; i < par.children.length; ++i){
+    if (par.children[i] === siblingtree) {
+      par.children.splice(i+1, 0, tree);
+      break;
+    }
+  }
+  tree.parent = par;
+}
+
+function hasGrandparent(subtree){
+  return (subtree.parent != null && subtree.parent.parent!= null);
+}
+
+// requires node to have grandparent.
+function makeNodeSiblingOfParent(tree){
+  if (!hasGrandparent(tree)){
+    console.log("NOGP");
+    return;
+  }
+  console.log("TEST");
+  var par = tree.parent;
+  removeNode(tree);
+  addSiblingTreeBelow(par, tree);
+}
+
 
 // Helper methods to modify the tree. Perhaps these should be in a class or a tree object?
 // Requires subtree to have a parent. Gets the node directly above the current node.
@@ -98,11 +120,15 @@ TreeStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
   switch (action.type){
     case "MAKE_SIBLING_NODE_FOR":
-      addChildBelow(action.node, "");
+      addSiblingBelow(action.node, "");
       TreeStore.emitChange();
       break;
     case "MAKE_NODE_CHILD_OF_SIBLING":
       makeNodeChildOfSibling(action.node);
+      TreeStore.emitChange();
+      break;
+    case "MAKE_NODE_SIBLING_OF_PARENT":
+      makeNodeSiblingOfParent(action.node);
       TreeStore.emitChange();
       break;
     case "SET_TEXT":
