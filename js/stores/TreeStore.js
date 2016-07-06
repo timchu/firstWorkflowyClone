@@ -101,7 +101,7 @@ TreeStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
   switch (action.type){
     case "MAKE_SIBLING_NODE_FOR":
-      addChild(action.node.parent, "");
+      addChildBelow(action.node, "");
       TreeStore.emitChange();
       break;
     case "MAKE_NODE_CHILD_OF_SIBLING":
@@ -110,7 +110,6 @@ TreeStore.dispatchToken = AppDispatcher.register(function(payload) {
       break;
     case "ADD_CHAR_TO":
       action.node.data += action.char;
-      console.log(action.node.data + " data");
       TreeStore.emitChange();
       break;
     case "DELETE_CHAR":
